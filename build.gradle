@@ -1,0 +1,185 @@
+// buildscript中的声明是gradle脚本自身需要使用的资源。可以声明的资源包括依赖项、第三方插件、maven仓库地址等。
+buildscript {
+  repositories {
+  	mavenLocal()
+    maven {
+      name "hdrs 仓库"
+      url "http://10.163.66.81/nexus/content/groups/public/"
+    }
+    maven {
+  	  name "jboss 仓库"
+      url "http://repository.jboss.com/maven2/"
+    }
+  }
+}
+// 而在build.gradle文件中直接声明的依赖项、仓库地址等信息是项目自身需要的资源。
+ 
+apply plugin: "war"
+apply plugin: "eclipse"
+apply plugin: "eclipse-wtp"
+
+// sourceCompatibility = 1.8为java版本，默认为当前JVM版本
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+//Gradle默认采用UTF-8编码，一般不用配置，如果需要可以采用如下方式
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+// webAppDirName默认值 src/main/webapp
+// webAppDirName = "webapp"
+repositories {
+	mavenLocal()
+    maven {
+      url "http://10.163.66.81/nexus/content/groups/public/"
+    }
+    mavenCentral()
+}
+
+// 应用的依懒包
+dependencies {
+    compile "org.springframework:spring-aop:${springVersion}"
+	compile "org.springframework:spring-aspects:${springVersion}"
+	compile "org.springframework:spring-beans:${springVersion}"
+	compile "org.springframework:spring-context:${springVersion}"
+	compile "org.springframework:spring-context-support:${springVersion}"
+	compile ("org.springframework:spring-core:${springVersion}") {
+		exclude module: "commons-logging"
+	}
+	compile "org.springframework:spring-expression:${springVersion}"
+	compile "org.springframework:spring-instrument:${springVersion}"
+	compile "org.springframework:spring-instrument-tomcat:${springVersion}"
+	compile "org.springframework:spring-jdbc:${springVersion}"
+	//compile "org.springframework:spring-jms:${springVersion}"
+	//"org.springframework:spring-messaging:${springVersion}"
+	compile "org.springframework:spring-orm:${springVersion}"
+	compile "org.springframework:spring-oxm:${springVersion}"
+	compile "org.springframework:spring-test:${springVersion}"
+	compile "org.springframework:spring-tx:${springVersion}"
+	compile "org.springframework:spring-web:${springVersion}"
+	compile "org.springframework:spring-webmvc:${springVersion}"
+	//compile "org.springframework:spring-webmvc-portlet:${springVersion}"
+	//"org.springframework:spring-websocket:${springVersion}"
+	compile "org.springframework.security:spring-security-core:4.2.3.RELEASE"
+	// Mybatis
+	compile "org.mybatis:mybatis-spring:1.3.1"
+	compile "org.mybatis:mybatis:3.4.4"
+	//dbcp 连接池配置数据库
+	//"commons-dbcp:commons-dbcp:1.4"
+	//c3p0 连接池配置数据库
+	compile "c3p0:c3p0:0.9.1.2"
+	compile "com.oracle:ojdbc6:11.2.0.4.0-atlassian-hosted"
+	//mysql数据库连接驱动
+	//compile "mysql:mysql-connector-java:6.0.5"
+	//compile "mysql:mysql-connector-java:5.1.40"
+	compile "commons-collections:commons-collections:3.2.1"
+	compile "commons-fileupload:commons-fileupload:1.3.1"
+	//compile "commons-httpclient:commons-httpclient:3.1"
+	compile "commons-logging:commons-logging:1.2"
+	compile "commons-io:commons-io:2.4"
+	compile "commons-net:commons-net:3.5"
+	compile "commons-codec:commons-codec:1.9"
+	compile "org.apache.commons:commons-pool2:2.4.2" 
+	compile "org.apache.commons:commons-lang3:3.4" 
+	//lang包下载不了
+	//compile "org.apache.commons:commons-lang:2.6" 
+	//compile "org.apache.httpcomponents:httpasyncclient:4.1.3"
+	//compile "org.apache.thrift:libthrift:0.10.0"
+	//compile "org.apache.velocity:velocity:1.7"
+	//tiles3 框架
+	//compile "org.apache.tiles:tiles-extras:3.0.7"
+	//compile "org.apache.tiles:tiles-servlet:3.0.7"
+	//compile "org.apache.tiles:tiles-jsp:3.0.7"
+	//zookeeper
+	//"org.apache.zookeeper:zookeeper:3.4.10"
+	//日志 框架
+	//compile "org.slf4j:jcl-over-slf4j:1.7.21"
+	compile "org.slf4j:slf4j-api:${slf4jVersion}"
+	compile "org.slf4j:slf4j-log4j12:1.7.21"
+	compile "log4j:log4j:1.2.17"
+	//"org.apache.logging.log4j:log4j-api:2.8.2"
+	//"org.apache.logging.log4j:log4j-core:2.8.2"
+	compile "org.apache.poi:poi:3.16"
+	compile "org.apache.poi:poi-ooxml:3.16"
+	//compile "org.apache.httpcomponents:httpasyncclient:4.1.2"
+	//compile "org.apache.httpcomponents:httpasyncclient-cache:4.1.2"
+	//compile "org.apache.httpcomponents:httpclient:4.5.2"
+	//compile "org.apache.httpcomponents:httpclient-cache:4.5.2"
+	//compile "org.apache.httpcomponents:httpcore:4.4.5"
+	//compile "org.apache.httpcomponents:httpcore-nio:4.4.5"
+	//compile "org.apache.httpcomponents:httpmime:4.5.2"
+	def jettyVersion = "9.4.6.v20170531"
+	//compile "org.eclipse.jetty:jetty-http:${jettyVersion}"
+	//compile "org.eclipse.jetty:jetty-continuation:${jettyVersion}"
+	//compile "org.eclipse.jetty:jetty-io:${jettyVersion}"
+	//compile "org.eclipse.jetty:jetty-security:${jettyVersion}"
+	//compile "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+	//compile "org.eclipse.jetty:jetty-server:${jettyVersion}"
+	//compile "org.eclipse.jetty:jetty-util:${jettyVersion}"
+	compile "org.quartz-scheduler:quartz:2.1.7"
+	//jbpm 从jboss仓库中下载
+	//compile "org.jbpm.jbpm4:jbpm-api:4.3"
+	//compile "org.jbpm.jbpm4:jbpm-jpdl:4.3"
+	//compile "org.jbpm.jbpm4:jbpm-pvm:4.3"
+	//compile "org.jbpm.jbpm4:jbpm-log:4.3"
+	//compile "org.jbpm.jbpm4:jbpm-db:4.3"
+	// Redis客户端
+	//compile "redis.clients:jedis:2.9.0"
+	compile "aopalliance:aopalliance:1.0"
+	//compile "asm:asm:3.3.1"
+	compile "cglib:cglib:2.2.2"
+	//compile "dom4j:dom4j:1.6.1"
+	compile "com.google.zxing:core:3.3.0"
+	compile "com.google.code.gson:gson:2.7"
+	//compile "com.google.guava:guava:22.0"
+	//compile "com.google.code:kaptcha:2.3.0"
+	//fastjson
+	compile "com.alibaba:fastjson:1.2.33"
+	//compile "com.alibaba:druid:1.1.0"
+	//MongoDB 驱动包
+	//compile "org.mongodb:mongo-java-driver:3.0.2"
+	compile "io.netty:netty-all:5.0.0.Alpha2"
+	compile "joda-time:joda-time:2.9.9"
+	//ehcach 缓存包
+	compile "net.sf.ehcache:ehcache:2.10.1"
+	 
+	compile "cglib:cglib-nodep:2.2.2"
+	compile "com.fasterxml.jackson.core:jackson-databind:2.9.0.pr4"
+	// Zookeeper 客户端
+	//"com.101tec:zkclient:0.10"
+	// hibernate dependon
+	compile "org.javassist:javassist:3.21.0-GA"
+	compile "javax.servlet:jstl:1.2"
+	compile "javax.transaction:jta:1.1"
+	//compile "javax.servlet:javax.servlet-api:3.1.0"
+	//JavaEE servlet
+	compile "javax:javaee-api:7.0"
+	//compile "org.hidetake:gradle-ssh-plugin:2.6.0"
+	//compile "org.akhikhl.gretty:gretty:+"
+	compile "org.json:json:20170516"
+	compile "org.codehaus.jackson:jackson-core-asl:1.9.13"
+	compile "org.codehaus.jackson:jackson-mapper-asl:1.9.13"
+	compile "org.hibernate:hibernate-core:3.6.7.Final"
+	compile "org.hibernate:hibernate-validator:5.2.5.Final"
+	// Webservice CXF相关包
+	compile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
+	compile "org.apache.cxf:cxf-rt-transports-http:${cxfVersion}"
+	
+	compile fileTree(dir:"src/libs",include:["*.jar"])
+	
+    testCompile "junit:junit:4.12"
+    testCompile "org.hamcrest:hamcrest-core:1.3"
+    //testCompile "org.springframework:spring-test:${springVersion}"
+    //testCompile "org.mockito:mockito-core:1.9.5"
+    providedCompile "javax.servlet:javax.servlet-api:3.1.0" 
+    //20180910 单点登陆依赖包
+    compile "org.apache.shiro:shiro-core:1.2.3"
+    compile "org.apache.shiro:shiro-spring:1.2.3"
+    compile "org.apache.shiro:shiro-cas:1.2.3"
+    //20181107 Spring Session + Redis实现分布式Session共享
+    compile "redis.clients:jedis:2.9.0"
+    compile "org.springframework.data:spring-data-redis:1.7.3.RELEASE"
+    compile "org.springframework.session:spring-session:1.2.2.RELEASE"
+    //compile "org.apache.commons:commons-pool2:2.4.2"  已经存在
+}
